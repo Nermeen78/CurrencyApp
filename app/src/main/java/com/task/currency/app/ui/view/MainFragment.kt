@@ -165,11 +165,9 @@ class MainFragment : Fragment() {
                 Status.SUCCESS -> {
                     _binding?.progressBar?.visibility = View.GONE
                     it.data?.let { result ->
-                        Log.d("Error", "error: ${adapter.count}  $currencySymbols")
                         this.currencySymbols.addAll(result.symbols.keys)
                     }
                     adapter.notifyDataSetChanged()
-                    Log.d("Error", "error: ${adapter.count}  $currencySymbols")
                 }
                 Status.LOADING -> {
                     _binding?.progressBar?.visibility = View.VISIBLE

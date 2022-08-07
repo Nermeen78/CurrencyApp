@@ -1,11 +1,12 @@
 package com.task.currency.app.data.api
 
-import androidx.lifecycle.LiveData
 import com.task.currency.app.data.model.ConvertResponse
+import com.task.currency.app.data.model.LatestRatesResponse
 import com.task.currency.app.data.model.SymbolsResponse
-import retrofit2.Call
+import com.task.currency.app.util.AppConst
 import retrofit2.Response
 import retrofit2.http.GET
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface ApiService {
@@ -29,5 +30,19 @@ interface ApiService {
      * @return response contains the available currencies
      */
     @GET("symbols")
-    suspend fun getCurrencySymbols():Response<SymbolsResponse>
+    suspend fun getCurrencySymbols(): Response<SymbolsResponse>
+
+    /**
+     * This Function returning latest rate for 10 popular currencies.
+     * @param date The today date.
+     * @param symbols  a list of comma-separated currency codes to limit output currencies.
+     * @param baseCurrency  the three-letter currency code of your base currency.
+     * @return response contains the available currencies
+     */
+    @GET("{date}")
+    suspend fun getLatestPopularCurrencies(
+        @Path("date") date: String = AppConst.TODAY_DATE,
+        @Query("symbols") symbols: String = AppConst.POPULAR_CURRENCIES,
+        @Query("base") baseCurrency: String = AppConst.BASECURRENCY
+    ): Response<LatestRatesResponse>
 }
