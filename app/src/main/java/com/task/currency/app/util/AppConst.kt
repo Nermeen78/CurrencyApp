@@ -5,7 +5,7 @@ import java.util.*
 
 object AppConst {
 
-    const val APIKEY="ZgSu0Xz6Ir1Vc4Iz0osgXUqstTXVGvIp"
+    const val APIKEY="uh7pyGH66sRItrVDkiW7NLp6tOjuIVML"
     val TODAY_DATE: String = SimpleDateFormat(
         "yyyy-MM-dd",
         Locale.ENGLISH

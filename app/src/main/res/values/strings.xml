@@ -9,4 +9,6 @@
     <string name="sperator"><![CDATA[->]]></string>
     <string name="default_base_currency">EGP</string>
     <string name="latest_rates_title">Latest 10 Popular Currencies Rates:</string>
+    <string name="three_days_historical_data">3 Days Historical Data:</string>
+    <string name="back">back</string>
 </resources>

@@ -15,7 +15,7 @@ import retrofit2.Response
 import java.io.IOException
 import javax.inject.Inject
 
-class CurrencyRepository @Inject constructor(private val apiHelper: ApiHelper) {
+class RemoteCurrencyRepository @Inject constructor(private val apiHelper: ApiHelper) {
     suspend fun convert(
         toCurrency: String,
         fromCurrency: String,

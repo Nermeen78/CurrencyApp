@@ -8,13 +8,17 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.findNavController
+import com.task.currency.app.R
+import com.task.currency.app.data.model.CurrencyAdapterItem
+import com.task.currency.app.data.model.CurrencyInfo
 import com.task.currency.app.data.model.CurrencyRate
 import com.task.currency.app.databinding.FragmentDetailsBinding
+import com.task.currency.app.ui.adapters.HistoricalCurrenciesAdapter
 import com.task.currency.app.ui.adapters.OtherCurrenciesAdapter
 import com.task.currency.app.ui.viewmodel.DetailsViewModel
 import com.task.currency.app.util.Status
 import dagger.hilt.android.AndroidEntryPoint
-import dagger.hilt.android.HiltAndroidApp
 
 /**
  * A simple [Fragment] subclass.
@@ -27,8 +31,10 @@ class DetailsFragment : Fragment() {
     private var _binding: FragmentDetailsBinding? = null
     private val binding get() = _binding!!
     private var otherCurrenciesList = arrayListOf<CurrencyRate>()
+    private var historicalCurrenciesList = arrayListOf<CurrencyAdapterItem>()
     private val detailsViewModel: DetailsViewModel by viewModels()
-    private var adapter: OtherCurrenciesAdapter? = null
+    private var otherCurrenciesAdapter: OtherCurrenciesAdapter? = null
+    private var historicalCurrenciesAdapter: HistoricalCurrenciesAdapter? = null
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -36,25 +42,26 @@ class DetailsFragment : Fragment() {
         // Inflate the layout for this fragment
         _binding = FragmentDetailsBinding.inflate(inflater, container, false)
         loadOtherCurrencies()
+        loadHistoricalCurrencies()
         _binding?.lifecycleOwner = this
+        _binding?.btnBack?.setOnClickListener {
+            binding.root.findNavController().navigate(R.id.action_detailsFragment_to_mainFragment)
+        }
         return binding.root
     }
 
     private fun loadOtherCurrencies() {
-        adapter = OtherCurrenciesAdapter(currencyRateList = this.otherCurrenciesList)
-        _binding?.otherCurrenciesAdapter = adapter
-        _binding?.recyclerViewOtherCurrencies?.adapter = adapter
+        otherCurrenciesAdapter = OtherCurrenciesAdapter(currencyRateList = this.otherCurrenciesList)
+        _binding?.otherCurrenciesAdapter = otherCurrenciesAdapter
+        _binding?.recyclerViewOtherCurrencies?.adapter = otherCurrenciesAdapter
         detailsViewModel.getLatestPopularCurrencies().observe(viewLifecycleOwner) {
             when (it.status) {
                 Status.SUCCESS -> {
                     _binding?.progressBar?.visibility = View.GONE
                     it.data?.let { result ->
-                        Log.d("RRRRRRR","TEEEEEEEEEEEe${otherCurrenciesList.size} ${result.getCurrenciesRates().size}")
                         otherCurrenciesList.clear()
                         otherCurrenciesList.addAll(result.getCurrenciesRates())
-
                         updateCurrencyList()
-                        Log.d("RRRRRR","TEEEEEEEEEEEe${otherCurrenciesList.size}")
 
                     }
 
@@ -73,8 +80,27 @@ class DetailsFragment : Fragment() {
         }
     }
 
+    private fun loadHistoricalCurrencies() {
+        historicalCurrenciesAdapter = HistoricalCurrenciesAdapter(historicalCurrenciesList)
+        _binding?.historicalCurrenciesAdapter = historicalCurrenciesAdapter
+        detailsViewModel.historicalCurrencyInfo.observe(viewLifecycleOwner) {
+            historicalCurrenciesList.clear()
+            var header=""
+            it.map { item->
+                if(header!=item.date)
+                {
+                    header=item.date
+                    historicalCurrenciesList.add(CurrencyAdapterItem(null,header,true))
+
+                }
+                historicalCurrenciesList.add(CurrencyAdapterItem(item,"",false))
+            }
+            historicalCurrenciesAdapter?.notifyDataSetChanged()
+        }
+    }
+
     private fun updateCurrencyList() {
-        adapter?.notifyDataSetChanged()
+        otherCurrenciesAdapter?.notifyDataSetChanged()
     }
 
     override fun onDestroyView() {
