@@ -1,6 +1,7 @@
 package com.task.currency.app.di
 
 import com.task.currency.app.data.api.ApiService
+import com.task.currency.app.util.AppConst
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -32,7 +33,7 @@ object NetworkRepositoryModule {
             val original: Request = chain.request()
 
             val request: Request = original.newBuilder()
-                .header("apikey", "x6pzMOryGgCPjhoAmAMCkhTkrI3G8Kpz")
+                .header("apikey", AppConst.APIKEY)
                 .method(original.method, original.body)
                 .build()
 

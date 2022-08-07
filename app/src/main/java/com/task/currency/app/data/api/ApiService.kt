@@ -1,9 +1,12 @@
 package com.task.currency.app.data.api
 
+import androidx.lifecycle.LiveData
 import com.task.currency.app.data.model.ConvertResponse
 import com.task.currency.app.data.model.SymbolsResponse
+import retrofit2.Call
+import retrofit2.Response
 import retrofit2.http.GET
-import retrofit2.http.Path
+import retrofit2.http.Query
 
 interface ApiService {
     /**
@@ -13,18 +16,18 @@ interface ApiService {
      * @param amount The amount to be converted.
      * @return response contains the result value
      */
-    @GET("/convert?to={to}&from={from}&amount={amount}")
+    @GET("convert")
     suspend fun convert(
-        @Path("to") toCurrency: String,
-        @Path("from") fromCurrency: String,
-        @Path("amount") amount: String,
-    ):ConvertResponse
+        @Query("to") toCurrency: String,
+        @Query("from") fromCurrency: String,
+        @Query("amount") amount: String,
+    ): Response<ConvertResponse>
 
 
     /**
      * This Function returning all available currencies.
      * @return response contains the available currencies
      */
-    @GET("/symbols")
-    suspend fun getCurrencySymbols():SymbolsResponse
+    @GET("symbols")
+    suspend fun getCurrencySymbols():Response<SymbolsResponse>
 }

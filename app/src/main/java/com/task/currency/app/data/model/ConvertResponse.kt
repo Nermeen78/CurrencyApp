@@ -6,5 +6,5 @@ data class ConvertResponse(
     var info: Info,
     var query: Query,
     var result: Double,
-    var success: Boolean
+    var success: Boolean,
 )
