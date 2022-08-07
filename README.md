@@ -8,5 +8,5 @@ I used Jetpack MVVM, KTX,View binding. Data binding, Navigation component, Hilt,
 -Historical Chart Graph
 -Unit tests
 
-Note: Try to change APIKey . you will find it AppConst Class under Utils 
+Note:To change APIKey . you will find it AppConst Class under Utils 
 
